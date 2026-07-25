@@ -11,7 +11,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.seuprojeto</groupId>
+    <groupId>com.meuprojeto</groupId>
     <artifactId>biblioteca-api</artifactId>
     <version>1.0.0</version>
     <name>biblioteca-api</name>
