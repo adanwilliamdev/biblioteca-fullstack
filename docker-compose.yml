@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: biblioteca-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: biblioteca
+      POSTGRES_USER: biblioteca
+      POSTGRES_PASSWORD: biblioteca
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U biblioteca"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: biblioteca-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: biblioteca
+      DB_USER: biblioteca
+      DB_PASSWORD: biblioteca
+      JWT_SECRET: d29ybGRzLW1vc3Qtc2VjcmV0LWtleS1jaGFuZ2UtaW4tcHJvZHVjdGlvbi1wbGVhc2U=
+      TMDB_API_KEY: ${TMDB_API_KEY:-}
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./frontend
+    container_name: biblioteca-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
+
+volumes:
+  postgres_data:
