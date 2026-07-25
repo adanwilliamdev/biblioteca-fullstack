@@ -1,135 +1,306 @@
-# 📚 Minha Biblioteca — Gerenciador de Séries e Filmes
+<div align="center">
 
-Aplicação full stack para catalogar filmes e séries, acompanhar o progresso de episódios/temporadas e visualizar estatísticas em um dashboard.
+# 📚 Minha Biblioteca
 
-## Stack
+### Gerenciador de Filmes e Séries
 
-| Camada       | Tecnologia                              |
-|--------------|------------------------------------------|
-| Back-end     | Java 17 + Spring Boot 3 (Web, Security, Data JPA) |
-| Banco        | PostgreSQL                                |
-| ORM          | Spring Data JPA / Hibernate                |
-| Front-end    | React 18 + TypeScript + Vite               |
-| Autenticação | Spring Security + JWT                      |
-| Gráficos     | Recharts                                   |
-| Build/Deploy | Maven, Docker, Docker Compose              |
+Aplicação Full Stack para catalogar filmes e séries, acompanhar o progresso de episódios e visualizar estatísticas através de um dashboard moderno.
 
-## Estrutura do projeto
+![Java](https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
 
-```
+</div>
+
+---
+
+# 📖 Sobre
+
+O **Minha Biblioteca** é um sistema para gerenciamento de filmes e séries, permitindo organizar sua biblioteca pessoal, acompanhar episódios assistidos, importar conteúdos do TMDB e visualizar estatísticas em tempo real.
+
+---
+
+# ✨ Funcionalidades
+
+## 🎬 Catálogo
+
+- Cadastro manual de filmes e séries
+- Importação automática pelo TMDB
+- Busca por título
+- Filtros por gênero, ano e tipo
+- Paginação
+
+## 📺 Progresso
+
+- Marcar filmes como assistidos
+- Controle de episódios
+- Controle de temporadas
+- Progresso automático
+
+## 📊 Dashboard
+
+- Filmes cadastrados
+- Séries cadastradas
+- Horas assistidas
+- Episódios assistidos
+- Progresso geral
+- Distribuição por gênero
+- Continuar assistindo
+
+## 👤 Usuários
+
+- Cadastro
+- Login
+- JWT
+- Perfil
+- Controle de permissões
+
+## ⚙ Administração
+
+- CRUD completo
+- Filmes
+- Séries
+- Temporadas
+- Episódios
+
+---
+
+# 🛠 Tecnologias
+
+## Backend
+
+- Java 17
+- Spring Boot 3
+- Spring Security
+- Spring Data JPA
+- Hibernate
+- PostgreSQL
+- JWT
+- Maven
+
+## Frontend
+
+- React 18
+- TypeScript
+- Vite
+- React Router
+- Recharts
+
+## DevOps
+
+- Docker
+- Docker Compose
+
+---
+
+# 📂 Estrutura
+
+```text
 .
-├── backend/    # API REST em Spring Boot
-├── frontend/   # SPA em React + TypeScript
+
+├── backend/
+│   ├── src/
+│   ├── pom.xml
+│   └── Dockerfile
+│
+├── frontend/
+│   ├── src/
+│   ├── package.json
+│   └── Dockerfile
+│
 └── docker-compose.yml
 ```
 
-## Integração com o TMDB (busca de filmes/séries)
+---
 
-O catálogo pode importar filmes e séries prontos (pôster, sinopse, ano, temporadas e episódios) a partir do [TMDB](https://www.themoviedb.org/). Isso é opcional — sem a chave configurada, a aba "Buscar no TMDB" avisa que a integração não está disponível e o cadastro manual continua funcionando normalmente.
+# 🚀 Executando o Projeto
 
-1. Crie uma conta gratuita em https://www.themoviedb.org/ e gere uma chave de API (v3 auth) em **Configurações → API**.
-2. Copie `.env.example` para `.env` na raiz do projeto e cole a chave em `TMDB_API_KEY`.
-3. Suba o projeto normalmente (Docker Compose lê o `.env` automaticamente) ou, rodando localmente, exporte a variável antes de iniciar o back-end:
-   ```bash
-   export TMDB_API_KEY=sua_chave_aqui
-   ```
-
-## Rodando com Docker (recomendado)
-
-Pré-requisitos: Docker e Docker Compose instalados. Configure o `.env` (ver seção acima) antes de subir, se quiser usar a busca do TMDB.
+## Docker (Recomendado)
 
 ```bash
 docker compose up --build
 ```
 
-- Front-end: http://localhost:5173
-- API: http://localhost:8080
-- Swagger: http://localhost:8080/swagger-ui.html
+Aplicação disponível em:
 
-O primeiro usuário cadastrado não é administrador automaticamente — veja a seção **"Criando um administrador"** abaixo.
+| Serviço | URL |
+|----------|-----|
+| Frontend | http://localhost:5173 |
+| API | http://localhost:8080 |
+| Swagger | http://localhost:8080/swagger-ui.html |
 
-## Rodando localmente (sem Docker)
+---
 
-### 1. Banco de dados
+## Execução Local
 
-Suba um PostgreSQL local (ou use o serviço `postgres` do `docker-compose.yml` isoladamente):
+### Banco
 
 ```bash
-docker run --name biblioteca-postgres -e POSTGRES_DB=biblioteca \
-  -e POSTGRES_USER=biblioteca -e POSTGRES_PASSWORD=biblioteca \
-  -p 5432:5432 -d postgres:16-alpine
+docker run --name biblioteca-postgres \
+-e POSTGRES_DB=biblioteca \
+-e POSTGRES_USER=biblioteca \
+-e POSTGRES_PASSWORD=biblioteca \
+-p 5432:5432 \
+-d postgres:16-alpine
 ```
 
-### 2. Back-end
+### Backend
 
 ```bash
 cd backend
+
 mvn spring-boot:run
 ```
 
-A API sobe em `http://localhost:8080`. As tabelas são criadas/atualizadas automaticamente pelo Hibernate (`ddl-auto: update`).
-
-### 3. Front-end
+### Frontend
 
 ```bash
 cd frontend
+
 npm install
+
 npm run dev
 ```
 
-O front-end sobe em `http://localhost:5173` e já está configurado (via proxy do Vite) para conversar com a API em `localhost:8080`.
+---
 
-## Criando um administrador
+# 🔑 Variáveis de Ambiente
 
-Todo usuário criado via `/api/auth/register` nasce com a role `USER`. Para promover alguém a `ADMIN` (necessário para acessar a tela de Administração e o CRUD de conteúdos), rode no banco:
+Crie um arquivo `.env`
 
-```sql
-UPDATE usuarios SET role = 'ADMIN' WHERE email = 'seu-email@exemplo.com';
+```env
+TMDB_API_KEY=sua_chave
 ```
 
-## Principais endpoints da API
+A integração com o TMDB é opcional.
 
-| Método | Rota                                        | Descrição                              |
-|--------|----------------------------------------------|-----------------------------------------|
-| POST   | `/api/auth/register`                          | Cria conta de usuário                   |
-| POST   | `/api/auth/login`                             | Autentica e retorna um JWT              |
-| GET    | `/api/users/me`                               | Retorna o perfil do usuário logado      |
-| PUT    | `/api/users/me`                               | Atualiza nome do usuário                |
-| GET    | `/api/catalog`                                | Lista conteúdos (paginado, com filtros) |
-| GET    | `/api/catalog/{id}`                           | Detalhes de um conteúdo                 |
-| POST   | `/api/catalog`                                | Cria filme/série (qualquer usuário logado) |
-| PUT    | `/api/catalog/{id}` *(ADMIN)*                 | Edita filme/série                       |
-| DELETE | `/api/catalog/{id}` *(ADMIN)*                 | Remove filme/série                      |
-| POST   | `/api/catalog/{id}/temporadas`                | Adiciona temporada a uma série (qualquer usuário logado) |
-| DELETE | `/api/catalog/temporadas/{id}` *(ADMIN)*      | Remove temporada                        |
-| POST   | `/api/catalog/temporadas/{id}/episodios`      | Adiciona episódio a uma temporada (qualquer usuário logado) |
-| DELETE | `/api/catalog/episodios/{id}` *(ADMIN)*       | Remove episódio                         |
-| PUT    | `/api/progresso/episodios/{id}?status=ASSISTIDO\|PENDENTE` | Marca/desmarca episódio |
-| PUT    | `/api/progresso/conteudos/{id}?status=ASSISTIDO\|PENDENTE` | Marca/desmarca filme    |
-| GET    | `/api/dashboard`                              | Estatísticas do usuário logado          |
-| GET    | `/api/tmdb/status`                            | Indica se a integração com o TMDB está configurada |
-| GET    | `/api/tmdb/search?query=&tipo=FILME\|SERIE`   | Busca filmes/séries no TMDB              |
-| POST   | `/api/tmdb/import?tmdbId=&tipo=FILME\|SERIE`  | Importa um título do TMDB (com temporadas/episódios, se for série) |
+Sem a chave o cadastro manual continua funcionando normalmente.
 
-Documentação interativa completa em `/swagger-ui.html` com o back-end rodando.
+---
 
-## Funcionalidades implementadas
+# 🎬 Integração TMDB
 
-- Cadastro/login com JWT e senhas criptografadas (BCrypt)
-- Dashboard com estatísticas (filmes/séries no catálogo, episódios assistidos, horas assistidas, progresso geral, distribuição por gênero, séries concluídas vs. em progresso, "continuar assistindo")
-- Catálogo com busca por título, filtros por gênero/ano/tipo e paginação
-- Botão **"+ Adicionar"** na tela de Catálogo, disponível para qualquer usuário logado, com duas formas de cadastro:
-  - **Buscar no TMDB**: pesquisa filmes/séries na base do TMDB e importa com um clique (pôster, sinopse, ano, gênero e, para séries, todas as temporadas e episódios já cadastrados automaticamente)
-  - **Cadastro manual**: formulário simples para digitar os dados na mão, sem depender de API externa
-- Tela de detalhes com temporadas expansíveis, checkboxes para marcar episódios como assistidos (o progresso da temporada e da série é recalculado automaticamente) e botões para adicionar temporadas/episódios manualmente a uma série (útil para séries cadastradas à mão)
-- Marcação de filmes como assistido/não assistido
-- Tela de administração com CRUD completo de filmes, séries, temporadas e episódios (protegida por role `ADMIN`); edição e remoção de conteúdos continuam restritas a administradores, mas qualquer usuário pode adicionar
-- Edição de perfil do usuário
+O sistema permite importar automaticamente:
 
-## Próximos passos sugeridos
+- Poster
+- Sinopse
+- Gêneros
+- Ano
+- Temporadas
+- Episódios
 
-- Upload real de imagens de capa no cadastro manual (hoje é apenas uma URL)
-- Testes automatizados (JUnit no back-end, Vitest/RTL no front-end)
-- Paginação/infinite scroll na tela de administração
-- Notificações e área de configurações mencionadas no dashboard
-- Cache local dos gêneros/detalhes do TMDB para reduzir chamadas repetidas à API externa
+Tudo utilizando a API do TMDB.
+
+---
+
+# 👤 Administração
+
+Todos os usuários são criados com a role:
+
+```
+USER
+```
+
+Para promover um usuário:
+
+```sql
+UPDATE usuarios
+SET role='ADMIN'
+WHERE email='usuario@email.com';
+```
+
+---
+
+# 📡 API
+
+## Autenticação
+
+```
+POST /api/auth/register
+
+POST /api/auth/login
+```
+
+## Usuários
+
+```
+GET /api/users/me
+
+PUT /api/users/me
+```
+
+## Catálogo
+
+```
+GET /api/catalog
+
+POST /api/catalog
+
+PUT /api/catalog/{id}
+
+DELETE /api/catalog/{id}
+```
+
+## Dashboard
+
+```
+GET /api/dashboard
+```
+
+## TMDB
+
+```
+GET /api/tmdb/search
+
+POST /api/tmdb/import
+```
+
+A documentação completa pode ser acessada pelo Swagger.
+
+---
+
+# 📌 Roadmap
+
+- [x] Login JWT
+- [x] Dashboard
+- [x] Controle de episódios
+- [x] CRUD de filmes
+- [x] CRUD de séries
+- [x] Integração TMDB
+- [x] Docker
+- [ ] Upload de capas
+- [ ] Testes automatizados
+- [ ] Infinite Scroll
+- [ ] Notificações
+- [ ] Configurações
+- [ ] Cache do TMDB
+
+---
+
+# 🤝 Contribuição
+
+```bash
+git checkout -b feature/minha-feature
+
+git commit -m "feat: nova funcionalidade"
+
+git push origin feature/minha-feature
+```
+
+Depois abra um Pull Request.
+
+---
+
+# 📄 Licença
+
+Distribuído sob a licença MIT.
+
+---
+
+<div align="center">
+
+Desenvolvido com ❤️ utilizando Java, Spring Boot e React.
+
+</div>
