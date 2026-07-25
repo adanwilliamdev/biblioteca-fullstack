@@ -1,0 +1,32 @@
+# IDE
+.idea/
+*.iml
+.vscode/
+/shelf/
+workspace.xml
+
+# Environment variables (.env files) - CRÍTICO!
+.env
+.env.local
+.env.*.local
+.env.example  # Opcional, mas pode manter versionado
+
+# Node / Frontend
+node_modules/
+dist/
+build/
+*.log
+
+# Backend
+target/
+*.class
+*.jar
+*.war
+
+# Docker
+*.pid
+docker-compose.override.yml
+
+# OS
+.DS_Store
+Thumbs.db
