@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Play, Trash2 } from 'lucide-react';
+import { Plus, Play, SearchX, Trash2 } from 'lucide-react';
 import { deleteContent, listContent } from '../api/catalog';
 import { AddContentModal } from '../components/AddContentModal';
 import { ContentSummary, ContentType } from '../types';
@@ -63,7 +63,6 @@ export function Catalog() {
     <div className="page">
       <div className="catalog-header">
         <h1>Catálogo</h1>
-        <button className="btn-primary" onClick={() => setShowAddModal(true)}>+ Adicionar</button>
       </div>
 
       <form className="filters-bar" onSubmit={handleFilterSubmit}>
@@ -73,30 +72,35 @@ export function Catalog() {
           value={titulo}
           onChange={(e) => setTitulo(e.target.value)}
         />
-        <input
-          type="text"
-          placeholder="Gênero"
-          value={genero}
-          onChange={(e) => setGenero(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Ano"
-          value={ano}
-          onChange={(e) => setAno(e.target.value)}
-        />
-        <select value={tipo} onChange={(e) => setTipo(e.target.value as ContentType | '')}>
-          <option value="">Todos</option>
-          <option value="FILME">Filmes</option>
-          <option value="SERIE">Séries</option>
-        </select>
-        <button type="submit" className="btn-primary">Filtrar</button>
+        <div className="filters-bar-right">
+          <input
+            type="text"
+            placeholder="Gênero"
+            value={genero}
+            onChange={(e) => setGenero(e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="Ano"
+            value={ano}
+            onChange={(e) => setAno(e.target.value)}
+          />
+          <select value={tipo} onChange={(e) => setTipo(e.target.value as ContentType | '')}>
+            <option value="">Todos</option>
+            <option value="FILME">Filmes</option>
+            <option value="SERIE">Séries</option>
+          </select>
+          <button type="submit" className="btn-primary">Filtrar</button>
+        </div>
       </form>
 
       {loading ? (
         <div className="page-loading">Carregando catálogo...</div>
       ) : items.length === 0 ? (
-        <p className="empty-state">Nenhum conteúdo encontrado com esses filtros.</p>
+        <div className="empty-state">
+          <div className="empty-state-illustration"><SearchX size={40} strokeWidth={1.25} /></div>
+          Nada encontrado
+        </div>
       ) : (
         <>
           <div className="catalog-grid">
@@ -154,6 +158,10 @@ export function Catalog() {
           onAdded={() => fetchData(page)}
         />
       )}
+
+      <button className="fab-add" onClick={() => setShowAddModal(true)} title="Adicionar título">
+        <Plus size={24} />
+      </button>
     </div>
   );
 }

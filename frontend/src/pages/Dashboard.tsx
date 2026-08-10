@@ -1,15 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Bar,
-  BarChart,
   Cell,
   Pie,
   PieChart,
   ResponsiveContainer,
   Tooltip,
-  XAxis,
-  YAxis,
 } from 'recharts';
 import { Clapperboard, Clock, Film, ListChecks, Tv, TrendingUp } from 'lucide-react';
 import { getDashboard } from '../api/dashboard';
@@ -36,7 +32,6 @@ export function Dashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeBar, setActiveBar] = useState<number | null>(null);
 
   useEffect(() => {
     getDashboard()
@@ -64,21 +59,21 @@ export function Dashboard() {
 
       <div className="stats-grid">
         <div className="stat-card">
-          <div className="stat-icon amber"><Film size={20} /></div>
+          <div className="stat-icon amber"><Film size={18} /></div>
           <div className="stat-text">
             <span className="stat-value">{data.totalFilmes}</span>
             <span className="stat-label">Filmes no catálogo</span>
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon blue"><Tv size={20} /></div>
+          <div className="stat-icon blue"><Tv size={18} /></div>
           <div className="stat-text">
             <span className="stat-value">{data.totalSeries}</span>
             <span className="stat-label">Séries no catálogo</span>
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon green"><ListChecks size={20} /></div>
+          <div className="stat-icon green"><ListChecks size={18} /></div>
           <div className="stat-text">
             <div className="stat-value-row">
               <span className="stat-value">{data.episodiosAssistidos}</span>
@@ -90,7 +85,7 @@ export function Dashboard() {
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon rose"><Clock size={20} /></div>
+          <div className="stat-icon rose"><Clock size={18} /></div>
           <div className="stat-text">
             <span className="stat-value">{data.totalHorasAssistidas.toFixed(1)}h</span>
             <span className="stat-label">Total de horas assistidas</span>
@@ -149,39 +144,26 @@ export function Dashboard() {
         <div className="chart-card">
           <h3>Distribuição por gênero</h3>
           {temGeneros ? (
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={data.distribuicaoPorGenero} barCategoryGap="28%">
-                <XAxis
-                  dataKey="genero"
-                  tick={{ fontSize: 11, fill: 'var(--text-muted)' }}
-                  axisLine={{ stroke: 'var(--border-soft)' }}
-                  tickLine={false}
-                />
-                <YAxis
-                  allowDecimals={false}
-                  tick={{ fontSize: 11, fill: 'var(--text-muted)' }}
-                  axisLine={false}
-                  tickLine={false}
-                  width={28}
-                />
-                <Tooltip content={<DarkTooltip />} cursor={{ fill: 'var(--bg-elevated)' }} />
-                <Bar
-                  dataKey="quantidade"
-                  radius={[8, 8, 0, 0]}
-                  onMouseEnter={(_, index) => setActiveBar(index)}
-                  onMouseLeave={() => setActiveBar(null)}
-                >
-                  {data.distribuicaoPorGenero.map((_, index) => (
-                    <Cell
-                      key={index}
-                      fill={GENRE_COLORS[index % GENRE_COLORS.length]}
-                      opacity={activeBar === null || activeBar === index ? 1 : 0.35}
-                      style={{ transition: 'opacity 0.15s ease' }}
-                    />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="genre-list">
+              {(() => {
+                const max = Math.max(...data.distribuicaoPorGenero.map((g) => g.quantidade));
+                return data.distribuicaoPorGenero.map((item, index) => (
+                  <div className="genre-row" key={item.genero}>
+                    <span className="genre-row-label">{item.genero}</span>
+                    <div className="genre-row-track">
+                      <div
+                        className="genre-row-fill"
+                        style={{
+                          width: `${max > 0 ? (item.quantidade / max) * 100 : 0}%`,
+                          background: GENRE_COLORS[index % GENRE_COLORS.length],
+                        }}
+                      />
+                    </div>
+                    <span className="genre-row-value">{item.quantidade}</span>
+                  </div>
+                ));
+              })()}
+            </div>
           ) : (
             <p className="empty-state">Nenhum gênero cadastrado ainda.</p>
           )}

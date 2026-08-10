@@ -35,28 +35,28 @@ export function Profile() {
             <strong>{user.nome}</strong>
             <span>{user.email}</span>
           </div>
+          <span className="badge account-type">{user.role === 'ADMIN' ? 'Administrador' : 'Usuário'}</span>
         </div>
 
         {message && <div className="alert-info">{message}</div>}
 
-        <label>
-          Nome
-          <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} required />
-        </label>
+        <div className="profile-fields-grid">
+          <label>
+            Nome
+            <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} required />
+          </label>
 
-        <label>
-          E-mail
-          <input type="email" value={user.email} disabled />
-        </label>
+          <label>
+            E-mail
+            <input type="email" value={user.email} disabled />
+          </label>
+        </div>
 
-        <label>
-          Tipo de conta
-          <input type="text" value={user.role === 'ADMIN' ? 'Administrador' : 'Usuário'} disabled />
-        </label>
-
-        <button type="submit" className="btn-primary" disabled={loading}>
-          {loading ? 'Salvando...' : 'Salvar alterações'}
-        </button>
+        <div className="profile-actions">
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? 'Salvando...' : 'Salvar'}
+          </button>
+        </div>
       </form>
     </div>
   );
