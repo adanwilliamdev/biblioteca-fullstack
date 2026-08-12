@@ -4,21 +4,34 @@
 
 ### Gerenciador de Filmes e Séries
 
-Aplicação Full Stack para catalogar filmes e séries, acompanhar o progresso de episódios e visualizar estatísticas através de um dashboard moderno.
+Aplicação **Full Stack** para catalogar filmes e séries, acompanhar o progresso de episódios e visualizar estatísticas através de um dashboard moderno.
 
-![Java](https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
-![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Java](https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge\&logo=openjdk\&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3-6DB33F?style=for-the-badge\&logo=springboot\&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge\&logo=react\&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge\&logo=typescript\&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge\&logo=postgresql\&logoColor=white)
 
 </div>
 
 ---
 
-# 📖 Sobre
+# 📖 Sobre o Projeto
 
-O **Minha Biblioteca** é um sistema para gerenciamento de filmes e séries, permitindo organizar sua biblioteca pessoal, acompanhar episódios assistidos, importar conteúdos do TMDB e visualizar estatísticas em tempo real.
+O **Minha Biblioteca** é um sistema full-stack desenvolvido para gerenciamento de filmes e séries.
+
+A aplicação permite organizar uma biblioteca pessoal, acompanhar episódios assistidos, importar conteúdos automaticamente através da API do **TMDB** e visualizar estatísticas de consumo em um dashboard.
+
+O projeto foi desenvolvido com foco em:
+
+* Arquitetura Full Stack
+* APIs REST
+* Autenticação e autorização
+* Integração com APIs externas
+* Persistência de dados
+* Gerenciamento de estado
+* Containerização
+* Experiência de usuário
 
 ---
 
@@ -26,80 +39,117 @@ O **Minha Biblioteca** é um sistema para gerenciamento de filmes e séries, per
 
 ## 🎬 Catálogo
 
-- Cadastro manual de filmes e séries
-- Importação automática pelo TMDB
-- Busca por título
-- Filtros por gênero, ano e tipo
-- Paginação
+* Cadastro manual de filmes e séries
+* Importação automática através do TMDB
+* Busca por título
+* Filtros por gênero, ano e tipo
+* Paginação
 
-## 📺 Progresso
+## 📺 Controle de Progresso
 
-- Marcar filmes como assistidos
-- Controle de episódios
-- Controle de temporadas
-- Progresso automático
+* Marcação de filmes como assistidos
+* Controle individual de episódios
+* Controle de temporadas
+* Cálculo automático de progresso
+* Acompanhamento de conteúdos em andamento
 
 ## 📊 Dashboard
 
-- Filmes cadastrados
-- Séries cadastradas
-- Horas assistidas
-- Episódios assistidos
-- Progresso geral
-- Distribuição por gênero
-- Continuar assistindo
+O dashboard apresenta informações como:
+
+* 🎬 Filmes cadastrados
+* 📺 Séries cadastradas
+* ⏱️ Horas assistidas
+* 🎞️ Episódios assistidos
+* 📈 Progresso geral
+* 🎭 Distribuição por gênero
+* ▶️ Conteúdos para continuar assistindo
 
 ## 👤 Usuários
 
-- Cadastro
-- Login
-- JWT
-- Perfil
-- Controle de permissões
+* Cadastro de usuários
+* Login
+* Autenticação JWT
+* Perfil do usuário
+* Controle de permissões
+* Roles de acesso
 
-## ⚙ Administração
+## ⚙️ Administração
 
-- CRUD completo
-- Filmes
-- Séries
-- Temporadas
-- Episódios
+Área administrativa para gerenciamento de:
+
+* Filmes
+* Séries
+* Temporadas
+* Episódios
+* Usuários
 
 ---
 
-# 🛠 Tecnologias
+# 🛠️ Tecnologias
 
 ## Backend
 
-- Java 17
-- Spring Boot 3
-- Spring Security
-- Spring Data JPA
-- Hibernate
-- PostgreSQL
-- JWT
-- Maven
+| Tecnologia          | Utilização                    |
+| ------------------- | ----------------------------- |
+| **Java 17**         | Linguagem principal           |
+| **Spring Boot 3**   | Framework backend             |
+| **Spring Security** | Autenticação e autorização    |
+| **Spring Data JPA** | Persistência de dados         |
+| **Hibernate**       | ORM                           |
+| **PostgreSQL**      | Banco de dados                |
+| **JWT**             | Autenticação stateless        |
+| **Maven**           | Gerenciamento de dependências |
 
 ## Frontend
 
-- React 18
-- TypeScript
-- Vite
-- React Router
-- Recharts
+| Tecnologia       | Utilização               |
+| ---------------- | ------------------------ |
+| **React 18**     | Interface de usuário     |
+| **TypeScript**   | Tipagem estática         |
+| **Vite**         | Build e desenvolvimento  |
+| **React Router** | Roteamento               |
+| **Recharts**     | Gráficos e visualizações |
 
 ## DevOps
 
-- Docker
-- Docker Compose
+* Docker
+* Docker Compose
 
 ---
 
-# 📂 Estrutura
+# 🏗️ Arquitetura
+
+A aplicação é dividida em duas principais camadas:
+
+```text
+                    ┌─────────────────┐
+                    │    Frontend     │
+                    │ React + TS      │
+                    └────────┬────────┘
+                             │
+                             │ HTTP / REST
+                             ▼
+                    ┌─────────────────┐
+                    │     Backend     │
+                    │ Spring Boot     │
+                    └────────┬────────┘
+                             │
+              ┌──────────────┼──────────────┐
+              │              │              │
+              ▼              ▼              ▼
+        ┌──────────┐   ┌──────────┐   ┌──────────┐
+        │PostgreSQL│   │   TMDB   │   │   JWT    │
+        │          │   │   API    │   │ Security │
+        └──────────┘   └──────────┘   └──────────┘
+```
+
+---
+
+# 📂 Estrutura do Projeto
 
 ```text
 .
-
 ├── backend/
 │   ├── src/
 │   ├── pom.xml
@@ -110,32 +160,37 @@ O **Minha Biblioteca** é um sistema para gerenciamento de filmes e séries, per
 │   ├── package.json
 │   └── Dockerfile
 │
-└── docker-compose.yml
+├── docker-compose.yml
+└── README.md
 ```
 
 ---
 
 # 🚀 Executando o Projeto
 
-## Docker (Recomendado)
+## 🐳 Docker
+
+A forma recomendada para executar o projeto é utilizando Docker Compose.
 
 ```bash
 docker compose up --build
 ```
 
-Aplicação disponível em:
+Após a inicialização:
 
-| Serviço | URL |
-|----------|-----|
-| Frontend | http://localhost:5173 |
-| API | http://localhost:8080 |
-| Swagger | http://localhost:8080/swagger-ui.html |
+| Serviço      | URL                                   |
+| ------------ | ------------------------------------- |
+| **Frontend** | http://localhost:5173                 |
+| **API**      | http://localhost:8080                 |
+| **Swagger**  | http://localhost:8080/swagger-ui.html |
 
 ---
 
-## Execução Local
+# 💻 Execução Local
 
-### Banco
+## 🗄️ Banco de Dados
+
+Execute uma instância do PostgreSQL utilizando Docker:
 
 ```bash
 docker run --name biblioteca-postgres \
@@ -146,161 +201,261 @@ docker run --name biblioteca-postgres \
 -d postgres:16-alpine
 ```
 
-### Backend
+---
+
+## ☕ Backend
+
+Entre no diretório do backend:
 
 ```bash
 cd backend
+```
 
+Execute a aplicação:
+
+```bash
 mvn spring-boot:run
 ```
 
-### Frontend
+A API estará disponível em:
+
+```text
+http://localhost:8080
+```
+
+---
+
+## ⚛️ Frontend
+
+Entre no diretório do frontend:
 
 ```bash
 cd frontend
+```
 
+Instale as dependências:
+
+```bash
 npm install
+```
 
+Execute o projeto:
+
+```bash
 npm run dev
+```
+
+O frontend estará disponível em:
+
+```text
+http://localhost:5173
 ```
 
 ---
 
 # 🔑 Variáveis de Ambiente
 
-Crie um arquivo `.env`
+Crie um arquivo `.env` ou configure as variáveis no ambiente de execução.
 
 ```env
 TMDB_API_KEY=sua_chave
 ```
 
-A integração com o TMDB é opcional.
+A integração com o TMDB é **opcional**.
 
-Sem a chave o cadastro manual continua funcionando normalmente.
+Sem a chave configurada, o cadastro manual de filmes e séries continua funcionando normalmente.
+
+> 🔒 Nunca versione chaves de API, senhas ou outros dados sensíveis no repositório.
 
 ---
 
-# 🎬 Integração TMDB
+# 🎬 Integração com TMDB
 
-O sistema permite importar automaticamente:
+O sistema possui integração com a API do **TMDB**, permitindo importar informações automaticamente.
 
-- Poster
-- Sinopse
-- Gêneros
-- Ano
-- Temporadas
-- Episódios
+Entre os dados disponíveis estão:
 
-Tudo utilizando a API do TMDB.
+* 🖼️ Poster
+* 📝 Sinopse
+* 🎭 Gêneros
+* 📅 Ano de lançamento
+* 📺 Temporadas
+* 🎞️ Episódios
+
+Fluxo simplificado:
+
+```text
+Usuário
+   │
+   ▼
+Busca título
+   │
+   ▼
+API TMDB
+   │
+   ▼
+Informações do conteúdo
+   │
+   ▼
+Backend
+   │
+   ▼
+PostgreSQL
+   │
+   ▼
+Biblioteca do usuário
+```
 
 ---
 
 # 👤 Administração
 
-Todos os usuários são criados com a role:
+Todos os usuários são criados inicialmente com a role:
 
-```
+```text
 USER
 ```
 
-Para promover um usuário:
+Para promover um usuário para administrador:
 
 ```sql
 UPDATE usuarios
-SET role='ADMIN'
-WHERE email='usuario@email.com';
+SET role = 'ADMIN'
+WHERE email = 'usuario@email.com';
 ```
+
+> O nome da tabela e dos campos deve corresponder à implementação real do banco de dados.
 
 ---
 
 # 📡 API
 
-## Autenticação
+## 🔐 Autenticação
 
-```
+```http
 POST /api/auth/register
-
 POST /api/auth/login
 ```
 
-## Usuários
+## 👤 Usuários
 
-```
+```http
 GET /api/users/me
-
 PUT /api/users/me
 ```
 
-## Catálogo
+## 🎬 Catálogo
 
-```
+```http
 GET /api/catalog
-
 POST /api/catalog
-
 PUT /api/catalog/{id}
-
 DELETE /api/catalog/{id}
 ```
 
-## Dashboard
+## 📊 Dashboard
 
-```
+```http
 GET /api/dashboard
 ```
 
-## TMDB
+## 🎬 TMDB
 
-```
+```http
 GET /api/tmdb/search
-
 POST /api/tmdb/import
 ```
 
-A documentação completa pode ser acessada pelo Swagger.
+A documentação completa da API pode ser acessada através do **Swagger/OpenAPI**:
+
+```text
+http://localhost:8080/swagger-ui.html
+```
+
+---
+
+# 🧪 Testes
+
+A estrutura do projeto pode ser expandida com testes automatizados para backend e frontend.
+
+### Backend
+
+```bash
+mvn test
+```
+
+### Frontend
+
+```bash
+npm run test
+```
+
+> Adicione estes comandos ao README somente se os respectivos frameworks de teste estiverem configurados no projeto.
 
 ---
 
 # 📌 Roadmap
 
-- [x] Login JWT
-- [x] Dashboard
-- [x] Controle de episódios
-- [x] CRUD de filmes
-- [x] CRUD de séries
-- [x] Integração TMDB
-- [x] Docker
-- [ ] Upload de capas
-- [ ] Testes automatizados
-- [ ] Infinite Scroll
-- [ ] Notificações
-- [ ] Configurações
-- [ ] Cache do TMDB
+## Concluído
+
+* [x] Login com JWT
+* [x] Dashboard
+* [x] Controle de episódios
+* [x] CRUD de filmes
+* [x] CRUD de séries
+* [x] Integração com TMDB
+* [x] Docker
+
+## Em desenvolvimento
+
+* [ ] Upload de capas
+* [ ] Testes automatizados
+* [ ] Infinite Scroll
+* [ ] Sistema de notificações
+* [ ] Configurações do usuário
+* [ ] Cache da API do TMDB
 
 ---
 
 # 🤝 Contribuição
 
+Contribuições são bem-vindas.
+
+Crie uma nova branch:
+
 ```bash
 git checkout -b feature/minha-feature
+```
 
-git commit -m "feat: nova funcionalidade"
+Faça suas alterações e crie um commit:
 
+```bash
+git add .
+git commit -m "feat: adiciona nova funcionalidade"
+```
+
+Envie a branch:
+
+```bash
 git push origin feature/minha-feature
 ```
 
-Depois abra um Pull Request.
+Depois, abra um **Pull Request**.
 
 ---
 
 # 📄 Licença
 
-Distribuído sob a licença MIT.
+Este projeto está distribuído sob a licença **MIT**.
+
+Consulte o arquivo `LICENSE` para mais informações.
 
 ---
 
 <div align="center">
 
-Desenvolvido com ❤️ utilizando Java, Spring Boot e React.
+### Desenvolvido com ❤️
+
+**Java • Spring Boot • React • TypeScript • PostgreSQL**
 
 </div>
