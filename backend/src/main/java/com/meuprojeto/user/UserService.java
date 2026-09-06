@@ -1,6 +1,6 @@
-package com.seuprojeto.user;
+package com.meuprojeto.user;
 
-import com.seuprojeto.user.dto.*;
+import com.meuprojeto.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

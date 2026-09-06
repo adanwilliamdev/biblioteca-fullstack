@@ -1,4 +1,4 @@
-package com.seuprojeto.catalog;
+package com.meuprojeto.catalog;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

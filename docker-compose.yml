@@ -32,7 +32,13 @@ services:
       DB_NAME: biblioteca
       DB_USER: biblioteca
       DB_PASSWORD: biblioteca
-      JWT_SECRET: d29ybGRzLW1vc3Qtc2VjcmV0LWtleS1jaGFuZ2UtaW4tcHJvZHVjdGlvbi1wbGVhc2U=
+      # Obrigatório: crie um arquivo ".env" na raiz do projeto (veja .env.example)
+      # com JWT_SECRET definido. Gere um valor com: openssl rand -base64 64
+      # Se não for definido, o Compose falha ao subir (evita rodar com secret fraco).
+      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET no arquivo .env (veja .env.example)}
+      JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-900000}
+      JWT_REFRESH_EXPIRATION_MS: ${JWT_REFRESH_EXPIRATION_MS:-604800000}
+      APP_COOKIE_SECURE: ${APP_COOKIE_SECURE:-false}
       TMDB_API_KEY: ${TMDB_API_KEY:-}
     ports:
       - "8080:8080"
@@ -44,7 +50,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "5173:80"
+      - "5173:8080"
 
 volumes:
   postgres_data:

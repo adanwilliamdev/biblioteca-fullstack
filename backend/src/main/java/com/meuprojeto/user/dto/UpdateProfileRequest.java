@@ -1,4 +1,4 @@
-package com.seuprojeto.user.dto;
+package com.meuprojeto.user.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

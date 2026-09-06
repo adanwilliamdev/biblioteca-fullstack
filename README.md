@@ -172,6 +172,16 @@ A aplicação é dividida em duas principais camadas:
 
 A forma recomendada para executar o projeto é utilizando Docker Compose.
 
+Antes de subir os containers, crie o arquivo `.env` na raiz do projeto a partir do
+`.env.example` e defina um `JWT_SECRET` (o Compose recusa subir sem essa variável):
+
+```bash
+cp .env.example .env
+# gere uma chave forte, por exemplo:
+openssl rand -base64 64
+# cole o valor gerado em JWT_SECRET no arquivo .env
+```
+
 ```bash
 docker compose up --build
 ```
@@ -335,7 +345,13 @@ WHERE email = 'usuario@email.com';
 ```http
 POST /api/auth/register
 POST /api/auth/login
+POST /api/auth/refresh
+POST /api/auth/logout
 ```
+
+> O access token e o refresh token são emitidos como cookies **httpOnly** (não aparecem no
+> corpo da resposta). O access token expira em 15 min por padrão; `/api/auth/refresh` renova
+> a sessão usando o refresh token (válido por 7 dias, rotacionado a cada uso).
 
 ## 👤 Usuários
 
@@ -348,9 +364,9 @@ PUT /api/users/me
 
 ```http
 GET /api/catalog
-POST /api/catalog
-PUT /api/catalog/{id}
-DELETE /api/catalog/{id}
+POST /api/catalog        (ADMIN)
+PUT /api/catalog/{id}    (ADMIN)
+DELETE /api/catalog/{id} (ADMIN)
 ```
 
 ## 📊 Dashboard
@@ -363,7 +379,7 @@ GET /api/dashboard
 
 ```http
 GET /api/tmdb/search
-POST /api/tmdb/import
+POST /api/tmdb/import (ADMIN)
 ```
 
 A documentação completa da API pode ser acessada através do **Swagger/OpenAPI**:
@@ -376,21 +392,28 @@ http://localhost:8080/swagger-ui.html
 
 # 🧪 Testes
 
-A estrutura do projeto pode ser expandida com testes automatizados para backend e frontend.
+O backend já tem `spring-boot-starter-test`, `spring-security-test` e H2 configurados.
 
 ### Backend
 
 ```bash
+cd backend
 mvn test
 ```
+
+Cobertura atual: fluxo de autenticação completo (registro, login, refresh com rotação,
+logout, acesso negado sem cookie), cálculo de progresso de filmes/séries (individual e em
+lote) e o filtro de rate limiting.
 
 ### Frontend
 
 ```bash
+cd frontend
 npm run test
 ```
 
-> Adicione estes comandos ao README somente se os respectivos frameworks de teste estiverem configurados no projeto.
+> Ainda não há testes de frontend configurados — é um bom próximo passo (ex: Vitest +
+> Testing Library para os fluxos de login e catálogo).
 
 ---
 
@@ -398,22 +421,24 @@ npm run test
 
 ## Concluído
 
-* [x] Login com JWT
+* [x] Login com JWT (access token + refresh token, via cookies httpOnly)
 * [x] Dashboard
 * [x] Controle de episódios
 * [x] CRUD de filmes
-* [x] CRUD de séries
+* [x] CRUD de séries (restrito a ADMIN)
 * [x] Integração com TMDB
-* [x] Docker
+* [x] Docker (containers rodando como usuário não-root)
+* [x] Testes automatizados de backend
+* [x] Cache da API do TMDB
+* [x] Rate limiting em login/registro
 
 ## Em desenvolvimento
 
+* [ ] Testes automatizados de frontend
 * [ ] Upload de capas
-* [ ] Testes automatizados
 * [ ] Infinite Scroll
 * [ ] Sistema de notificações
 * [ ] Configurações do usuário
-* [ ] Cache da API do TMDB
 
 ---
 

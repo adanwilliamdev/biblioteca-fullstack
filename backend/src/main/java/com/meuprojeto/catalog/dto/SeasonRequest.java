@@ -1,4 +1,4 @@
-package com.seuprojeto.catalog.dto;
+package com.meuprojeto.catalog.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

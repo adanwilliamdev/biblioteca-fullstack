@@ -1,13 +1,13 @@
-package com.seuprojeto.progress;
+package com.meuprojeto.progress;
 
-import com.seuprojeto.catalog.Content;
-import com.seuprojeto.catalog.ContentRepository;
-import com.seuprojeto.catalog.ContentService;
-import com.seuprojeto.catalog.Episode;
-import com.seuprojeto.catalog.EpisodeRepository;
-import com.seuprojeto.progress.dto.ProgressResponse;
-import com.seuprojeto.user.User;
-import com.seuprojeto.user.UserService;
+import com.meuprojeto.catalog.Content;
+import com.meuprojeto.catalog.ContentRepository;
+import com.meuprojeto.catalog.ContentService;
+import com.meuprojeto.catalog.Episode;
+import com.meuprojeto.catalog.EpisodeRepository;
+import com.meuprojeto.progress.dto.ProgressResponse;
+import com.meuprojeto.user.User;
+import com.meuprojeto.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

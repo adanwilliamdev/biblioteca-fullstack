@@ -1,6 +1,6 @@
-package com.seuprojeto.catalog.dto;
+package com.meuprojeto.catalog.dto;
 
-import com.seuprojeto.catalog.ContentType;
+import com.meuprojeto.catalog.ContentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

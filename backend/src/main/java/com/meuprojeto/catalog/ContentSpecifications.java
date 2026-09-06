@@ -1,4 +1,4 @@
-package com.seuprojeto.catalog;
+package com.meuprojeto.catalog;
 
 import org.springframework.data.jpa.domain.Specification;
 

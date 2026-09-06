@@ -1,4 +1,4 @@
-package com.seuprojeto.dashboard.dto;
+package com.meuprojeto.dashboard.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.seuprojeto.progress;
+package com.meuprojeto.progress;
 
 public enum ProgressStatus {
     ASSISTIDO,

@@ -1,9 +1,10 @@
-package com.seuprojeto.tmdb;
+package com.meuprojeto.tmdb;
 
-import com.seuprojeto.catalog.ContentType;
-import com.seuprojeto.tmdb.dto.TmdbImportResult;
-import com.seuprojeto.tmdb.dto.TmdbSearchResult;
+import com.meuprojeto.catalog.ContentType;
+import com.meuprojeto.tmdb.dto.TmdbImportResult;
+import com.meuprojeto.tmdb.dto.TmdbSearchResult;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class TmdbController {
     }
 
     @PostMapping("/import")
+    @PreAuthorize("hasRole('ADMIN')")
     public TmdbImportResult importar(@RequestParam Long tmdbId, @RequestParam ContentType tipo) {
         return tmdbService.importar(tmdbId, tipo);
     }

@@ -1,10 +1,11 @@
-package com.seuprojeto.tmdb;
+package com.meuprojeto.tmdb;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.seuprojeto.catalog.*;
-import com.seuprojeto.tmdb.dto.TmdbImportResult;
-import com.seuprojeto.tmdb.dto.TmdbSearchResult;
+import com.meuprojeto.catalog.*;
+import com.meuprojeto.tmdb.dto.TmdbImportResult;
+import com.meuprojeto.tmdb.dto.TmdbSearchResult;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -29,6 +30,9 @@ public class TmdbService {
         return tmdbProperties.isConfigured();
     }
 
+    // Cacheia buscas repetidas (mesmo termo + tipo) em memória, evitando bater na
+    // API do TMDB toda vez que o usuário reabre a mesma pesquisa.
+    @Cacheable(value = "tmdbBusca", key = "T(String).valueOf(#tipo) + '-' + #query.toLowerCase()")
     public List<TmdbSearchResult> buscar(String query, ContentType tipo) {
         if (!isConfigured()) {
             throw new IllegalStateException(

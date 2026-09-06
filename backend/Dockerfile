@@ -14,8 +14,13 @@ RUN mvn -B clean package -DskipTests
 FROM amazoncorretto:17-alpine
 WORKDIR /app
 
+# Executa como usuário não-root por segurança (evita rodar o processo como root
+# dentro do container caso a imagem seja comprometida).
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
+
 # Copiar o JAR
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build --chown=spring:spring /app/target/*.jar app.jar
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

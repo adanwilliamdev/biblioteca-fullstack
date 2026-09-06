@@ -1,6 +1,6 @@
-package com.seuprojeto.tmdb.dto;
+package com.meuprojeto.tmdb.dto;
 
-import com.seuprojeto.catalog.dto.ContentDetailResponse;
+import com.meuprojeto.catalog.dto.ContentDetailResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

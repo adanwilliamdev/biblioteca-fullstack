@@ -1,6 +1,7 @@
-package com.seuprojeto.config;
+package com.meuprojeto.config;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -46,7 +48,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {
-        return build(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro inesperado: " + ex.getMessage());
+        // Loga o detalhe completo (com stacktrace) apenas no servidor.
+        // O cliente recebe uma mensagem genérica para não vazar informações internas
+        // (estrutura de queries, nomes de classes, mensagens de driver de banco etc).
+        log.error("Erro inesperado ao processar requisição", ex);
+        return build(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro inesperado. Tente novamente mais tarde.");
     }
 
     private ResponseEntity<Map<String, Object>> build(HttpStatus status, String message) {

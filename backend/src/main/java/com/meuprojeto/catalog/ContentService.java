@@ -1,11 +1,11 @@
-package com.seuprojeto.catalog;
+package com.meuprojeto.catalog;
 
-import com.seuprojeto.catalog.dto.*;
-import com.seuprojeto.progress.ProgressStatus;
-import com.seuprojeto.progress.UserProgress;
-import com.seuprojeto.progress.UserProgressRepository;
-import com.seuprojeto.user.User;
-import com.seuprojeto.user.UserService;
+import com.meuprojeto.catalog.dto.*;
+import com.meuprojeto.progress.ProgressStatus;
+import com.meuprojeto.progress.UserProgress;
+import com.meuprojeto.progress.UserProgressRepository;
+import com.meuprojeto.user.User;
+import com.meuprojeto.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,10 +51,16 @@ public class ContentService {
         }
 
         Page<Content> page = contentRepository.findAll(spec, pageable);
-        return page.map(content -> toSummary(content, user.getId()));
+
+        // Calcula o progresso de todos os itens da pagina em lote (2 queries no total),
+        // em vez de uma query por item (evita N+1).
+        List<Long> idsDaPagina = page.getContent().stream().map(Content::getId).toList();
+        Map<Long, Double> progressoPorConteudo = calcularProgressoEmLote(idsDaPagina, user.getId());
+
+        return page.map(content -> toSummary(content, progressoPorConteudo.getOrDefault(content.getId(), 0.0)));
     }
 
-    private ContentSummaryResponse toSummary(Content content, Long userId) {
+    private ContentSummaryResponse toSummary(Content content, double progresso) {
         return ContentSummaryResponse.builder()
                 .id(content.getId())
                 .titulo(content.getTitulo())
@@ -60,8 +68,40 @@ public class ContentService {
                 .ano(content.getAno())
                 .imagemUrl(content.getImagemUrl())
                 .tipo(content.getTipo())
-                .progresso(calcularProgressoSerie(content.getId(), userId))
+                .progresso(progresso)
                 .build();
+    }
+
+    /**
+     * Calcula o progresso (0-100) de uma lista de conteudos para um usuario usando
+     * apenas duas queries agregadas, independentemente do tamanho da lista.
+     */
+    private Map<Long, Double> calcularProgressoEmLote(List<Long> conteudoIds, Long userId) {
+        if (conteudoIds.isEmpty()) {
+            return Map.of();
+        }
+
+        Map<Long, Long> totalEpisodiosPorConteudo = episodeRepository.contarEpisodiosPorConteudoIds(conteudoIds).stream()
+                .collect(Collectors.toMap(row -> (Long) row[0], row -> (Long) row[1]));
+
+        Map<Long, Long> assistidosPorConteudo = progressRepository.contarEpisodiosAssistidosPorConteudoIds(userId, conteudoIds).stream()
+                .collect(Collectors.toMap(row -> (Long) row[0], row -> (Long) row[1]));
+
+        Map<Long, ProgressStatus> statusFilmesPorConteudo = progressRepository.buscarStatusFilmesPorConteudoIds(userId, conteudoIds).stream()
+                .collect(Collectors.toMap(row -> (Long) row[0], row -> (ProgressStatus) row[1], (a, b) -> a));
+
+        Map<Long, Double> resultado = new HashMap<>();
+        for (Long conteudoId : conteudoIds) {
+            Long totalEpisodios = totalEpisodiosPorConteudo.get(conteudoId);
+            if (totalEpisodios != null && totalEpisodios > 0) {
+                long assistidos = assistidosPorConteudo.getOrDefault(conteudoId, 0L);
+                resultado.put(conteudoId, 100.0 * assistidos / totalEpisodios);
+            } else {
+                ProgressStatus status = statusFilmesPorConteudo.get(conteudoId);
+                resultado.put(conteudoId, status == ProgressStatus.ASSISTIDO ? 100.0 : 0.0);
+            }
+        }
+        return resultado;
     }
 
     @Transactional(readOnly = true)

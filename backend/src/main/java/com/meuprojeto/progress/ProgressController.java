@@ -1,6 +1,6 @@
-package com.seuprojeto.progress;
+package com.meuprojeto.progress;
 
-import com.seuprojeto.progress.dto.ProgressResponse;
+import com.meuprojeto.progress.dto.ProgressResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;

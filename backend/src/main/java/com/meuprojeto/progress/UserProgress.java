@@ -1,8 +1,8 @@
-package com.seuprojeto.progress;
+package com.meuprojeto.progress;
 
-import com.seuprojeto.catalog.Content;
-import com.seuprojeto.catalog.Episode;
-import com.seuprojeto.user.User;
+import com.meuprojeto.catalog.Content;
+import com.meuprojeto.catalog.Episode;
+import com.meuprojeto.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

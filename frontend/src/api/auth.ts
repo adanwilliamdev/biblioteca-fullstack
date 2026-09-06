@@ -11,6 +11,15 @@ export async function register(nome: string, email: string, senha: string): Prom
   return data;
 }
 
+export async function refresh(): Promise<AuthResponse> {
+  const { data } = await api.post<AuthResponse>('/auth/refresh');
+  return data;
+}
+
+export async function logout(): Promise<void> {
+  await api.post('/auth/logout');
+}
+
 export async function getMe(): Promise<UserProfile> {
   const { data } = await api.get<UserProfile>('/users/me');
   return data;

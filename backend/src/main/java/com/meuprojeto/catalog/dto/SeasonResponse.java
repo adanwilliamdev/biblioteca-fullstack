@@ -1,4 +1,4 @@
-package com.seuprojeto.catalog.dto;
+package com.meuprojeto.catalog.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

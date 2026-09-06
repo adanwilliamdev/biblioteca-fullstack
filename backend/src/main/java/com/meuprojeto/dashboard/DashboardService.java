@@ -1,17 +1,17 @@
-package com.seuprojeto.dashboard;
+package com.meuprojeto.dashboard;
 
-import com.seuprojeto.catalog.Content;
-import com.seuprojeto.catalog.ContentRepository;
-import com.seuprojeto.catalog.ContentService;
-import com.seuprojeto.catalog.ContentType;
-import com.seuprojeto.dashboard.dto.ContinuarAssistindoItem;
-import com.seuprojeto.dashboard.dto.DashboardResponse;
-import com.seuprojeto.dashboard.dto.GeneroStat;
-import com.seuprojeto.progress.ProgressStatus;
-import com.seuprojeto.progress.UserProgress;
-import com.seuprojeto.progress.UserProgressRepository;
-import com.seuprojeto.user.User;
-import com.seuprojeto.user.UserService;
+import com.meuprojeto.catalog.Content;
+import com.meuprojeto.catalog.ContentRepository;
+import com.meuprojeto.catalog.ContentService;
+import com.meuprojeto.catalog.ContentType;
+import com.meuprojeto.dashboard.dto.ContinuarAssistindoItem;
+import com.meuprojeto.dashboard.dto.DashboardResponse;
+import com.meuprojeto.dashboard.dto.GeneroStat;
+import com.meuprojeto.progress.ProgressStatus;
+import com.meuprojeto.progress.UserProgress;
+import com.meuprojeto.progress.UserProgressRepository;
+import com.meuprojeto.user.User;
+import com.meuprojeto.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class DashboardService {
 
     private final ContentRepository contentRepository;
-    private final com.seuprojeto.catalog.EpisodeRepository episodeRepository;
+    private final com.meuprojeto.catalog.EpisodeRepository episodeRepository;
     private final UserProgressRepository progressRepository;
     private final UserService userService;
     private final ContentService contentService;

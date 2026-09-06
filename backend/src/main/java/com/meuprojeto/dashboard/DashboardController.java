@@ -1,6 +1,6 @@
-package com.seuprojeto.dashboard;
+package com.meuprojeto.dashboard;
 
-import com.seuprojeto.dashboard.dto.DashboardResponse;
+import com.meuprojeto.dashboard.dto.DashboardResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;

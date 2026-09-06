@@ -1,6 +1,6 @@
-package com.seuprojeto.catalog;
+package com.meuprojeto.catalog;
 
-import com.seuprojeto.catalog.dto.*;
+import com.meuprojeto.catalog.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,6 +36,7 @@ public class ContentController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Content> criar(@Valid @RequestBody ContentRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(contentService.criar(request));
     }
@@ -47,28 +48,33 @@ public class ContentController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> remover(@PathVariable Long id) {
         contentService.remover(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/temporadas")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Season> adicionarTemporada(@PathVariable Long id, @Valid @RequestBody SeasonRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(contentService.adicionarTemporada(id, request));
     }
 
     @DeleteMapping("/temporadas/{temporadaId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> removerTemporada(@PathVariable Long temporadaId) {
         contentService.removerTemporada(temporadaId);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/temporadas/{temporadaId}/episodios")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Episode> adicionarEpisodio(@PathVariable Long temporadaId, @Valid @RequestBody EpisodeRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(contentService.adicionarEpisodio(temporadaId, request));
     }
 
     @DeleteMapping("/episodios/{episodioId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> removerEpisodio(@PathVariable Long episodioId) {
         contentService.removerEpisodio(episodioId);
         return ResponseEntity.noContent().build();

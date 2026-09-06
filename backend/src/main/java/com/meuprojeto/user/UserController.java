@@ -1,7 +1,7 @@
-package com.seuprojeto.user;
+package com.meuprojeto.user;
 
-import com.seuprojeto.user.dto.UpdateProfileRequest;
-import com.seuprojeto.user.dto.UserProfileResponse;
+import com.meuprojeto.user.dto.UpdateProfileRequest;
+import com.meuprojeto.user.dto.UserProfileResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

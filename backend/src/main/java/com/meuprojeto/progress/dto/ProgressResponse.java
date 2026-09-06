@@ -1,4 +1,4 @@
-package com.seuprojeto.progress.dto;
+package com.meuprojeto.progress.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

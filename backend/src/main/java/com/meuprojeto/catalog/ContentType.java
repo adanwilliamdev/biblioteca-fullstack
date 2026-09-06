@@ -1,4 +1,4 @@
-package com.seuprojeto.catalog;
+package com.meuprojeto.catalog;
 
 public enum ContentType {
     FILME,

@@ -2,7 +2,8 @@ export type ContentType = 'FILME' | 'SERIE';
 export type ProgressStatus = 'ASSISTIDO' | 'PENDENTE';
 
 export interface AuthResponse {
-  token: string;
+  // O access token não é mais devolvido no corpo da resposta: ele viaja apenas
+  // em um cookie httpOnly, que o JavaScript do frontend não consegue ler.
   id: number;
   nome: string;
   email: string;

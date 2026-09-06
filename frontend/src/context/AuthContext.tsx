@@ -7,7 +7,7 @@ interface AuthContextValue {
   loading: boolean;
   login: (email: string, senha: string) => Promise<void>;
   register: (nome: string, email: string, senha: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
 
@@ -21,37 +21,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const profile = await authApi.getMe();
       setUser(profile);
-      localStorage.setItem('user', JSON.stringify(profile));
     } catch {
       setUser(null);
     }
   }
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      refreshUser().finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
+    // O access token vive em um cookie httpOnly (não visível ao JS), então a
+    // única forma de saber se já existe uma sessão válida é perguntar ao backend.
+    refreshUser().finally(() => setLoading(false));
   }, []);
 
   async function login(email: string, senha: string) {
-    const response = await authApi.login(email, senha);
-    localStorage.setItem('token', response.token);
-    setUser({ id: response.id, nome: response.nome, email: response.email, role: response.role });
+    const profile = await authApi.login(email, senha);
+    setUser(profile);
   }
 
   async function register(nome: string, email: string, senha: string) {
-    const response = await authApi.register(nome, email, senha);
-    localStorage.setItem('token', response.token);
-    setUser({ id: response.id, nome: response.nome, email: response.email, role: response.role });
+    const profile = await authApi.register(nome, email, senha);
+    setUser(profile);
   }
 
-  function logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
+  async function logout() {
+    try {
+      await authApi.logout();
+    } finally {
+      setUser(null);
+    }
   }
 
   return (
