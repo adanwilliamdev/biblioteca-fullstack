@@ -27,15 +27,11 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: biblioteca
-      DB_USER: biblioteca
-      DB_PASSWORD: biblioteca
-      # Obrigatório: crie um arquivo ".env" na raiz do projeto (veja .env.example)
+      DATABASE_URL: postgresql://biblioteca:biblioteca@postgres:5432/biblioteca
+      PORT: 8080
+      # Obrigatório: crie um arquivo ".env" na raiz do projeto (veja backend/.env.example)
       # com JWT_SECRET definido. Gere um valor com: openssl rand -base64 64
-      # Se não for definido, o Compose falha ao subir (evita rodar com secret fraco).
-      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET no arquivo .env (veja .env.example)}
+      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET no arquivo .env (veja backend/.env.example)}
       JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-900000}
       JWT_REFRESH_EXPIRATION_MS: ${JWT_REFRESH_EXPIRATION_MS:-604800000}
       APP_COOKIE_SECURE: ${APP_COOKIE_SECURE:-false}

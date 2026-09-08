@@ -1,0 +1,107 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ContentType {
+  FILME
+  SERIE
+}
+
+enum ProgressStatus {
+  ASSISTIDO
+  PENDENTE
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  nome      String
+  senha     String
+  role      Role     @default(USER)
+  criadoEm  DateTime @default(now())
+
+  refreshTokens RefreshToken[]
+  progressos    UserProgress[]
+
+  @@map("usuarios")
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique @db.VarChar(100)
+  usuarioId Int      @map("usuario_id")
+  usuario   User     @relation(fields: [usuarioId], references: [id])
+  expiraEm  DateTime
+  revogado  Boolean  @default(false)
+  criadoEm  DateTime @default(now())
+
+  @@map("refresh_tokens")
+}
+
+model Content {
+  id        Int         @id @default(autoincrement())
+  titulo    String
+  sinopse   String?     @db.VarChar(2000)
+  genero    String?
+  ano       Int?
+  imagemUrl String?
+  tipo      ContentType
+  assistido Boolean?
+  criadoEm  DateTime    @default(now())
+
+  temporadas Season[]
+  progressos UserProgress[]
+
+  @@map("conteudos")
+}
+
+model Season {
+  id         Int     @id @default(autoincrement())
+  numero     Int
+  titulo     String?
+  conteudoId Int     @map("conteudo_id")
+  conteudo   Content @relation(fields: [conteudoId], references: [id], onDelete: Cascade)
+
+  episodios Episode[]
+
+  @@map("temporadas")
+}
+
+model Episode {
+  id             Int     @id @default(autoincrement())
+  numero         Int
+  titulo         String?
+  duracaoMinutos Int?
+  temporadaId    Int     @map("temporada_id")
+  temporada      Season  @relation(fields: [temporadaId], references: [id], onDelete: Cascade)
+
+  progressos UserProgress[]
+
+  @@map("episodios")
+}
+
+model UserProgress {
+  id         Int             @id @default(autoincrement())
+  usuarioId  Int             @map("usuario_id")
+  usuario    User            @relation(fields: [usuarioId], references: [id])
+  conteudoId Int?            @map("conteudo_id")
+  conteudo   Content?        @relation(fields: [conteudoId], references: [id], onDelete: Cascade)
+  episodioId Int?            @map("episodio_id")
+  episodio   Episode?        @relation(fields: [episodioId], references: [id], onDelete: Cascade)
+  status     ProgressStatus
+  atualizadoEm DateTime?     @map("atualizado_em")
+
+  @@unique([usuarioId, episodioId])
+  @@map("progresso_usuario")
+}
