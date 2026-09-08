@@ -34,7 +34,7 @@ RUN apk add --no-cache openssl bash
 RUN addgroup -S nestjs && adduser -S nestjs -G nestjs
 
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/prisma ./prisma
+COPY --from=build /app/prisma ./prisma
 COPY --from=build --chown=nestjs:nestjs /app/dist ./dist
 
 # Ajusta permissões de TODO o node_modules (o client do Prisma fica em
@@ -47,4 +47,7 @@ RUN chown -R nestjs:nestjs /app/node_modules /app/prisma
 USER nestjs:nestjs
 EXPOSE 8080
 
-CMD ["node", "dist/main"]
+# Aplica as migrations pendentes no banco antes de subir a API. Seguro para
+# rodar em todo restart do container: "migrate deploy" só aplica o que
+# ainda não foi aplicado e não pede confirmação (diferente do "migrate dev").
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]
