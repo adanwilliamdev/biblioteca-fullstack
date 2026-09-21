@@ -1,53 +1,21 @@
-FROM node:20-alpine AS build
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 WORKDIR /app
 
-# Instala OpenSSL (necessário para o Prisma detectar a versão correta no Alpine)
-RUN apk add --no-cache openssl
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY package*.json ./
-COPY prisma ./prisma
-RUN npm install
+COPY alembic.ini ./
+COPY alembic ./alembic
+COPY app ./app
 
-COPY tsconfig.json nest-cli.json ./
-COPY src ./src
-RUN npx prisma generate
-RUN npm run build
+RUN useradd --system --uid 10001 appuser && chown -R appuser /app
+USER appuser
 
-# Instala apenas as dependências de produção em uma pasta separada,
-# já com o client do Prisma gerado (evita rodar "prisma generate" de novo
-# na imagem final, que era a causa do erro de permissão em runtime).
-FROM node:20-alpine AS deps
-WORKDIR /app
-RUN apk add --no-cache openssl
-COPY package*.json ./
-COPY prisma ./prisma
-RUN npm install --omit=dev
-RUN npx prisma generate
-
-FROM node:20-alpine
-WORKDIR /app
-
-# Instala OpenSSL e bash (para melhor compatibilidade)
-RUN apk add --no-cache openssl bash
-
-# Cria usuário não-root
-RUN addgroup -S nestjs && adduser -S nestjs -G nestjs
-
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=build /app/prisma ./prisma
-COPY --from=build --chown=nestjs:nestjs /app/dist ./dist
-
-# Ajusta permissões de TODO o node_modules (o client do Prisma fica em
-# node_modules/.prisma, uma pasta separada de node_modules/@prisma — o
-# chown anterior cobria só @prisma e deixava .prisma com dono root,
-# causando "Can't write to .../@prisma/engines" quando o processo
-# rodava como usuário não-root)
-RUN chown -R nestjs:nestjs /app/node_modules /app/prisma
-
-USER nestjs:nestjs
 EXPOSE 8080
+HEALTHCHECK --interval=15s --timeout=3s --retries=5 \
+  CMD python -c "import urllib.request,os; urllib.request.urlopen(f'http://localhost:{os.environ.get(\"PORT\",\"8080\")}/health')"
 
-# Aplica as migrations pendentes no banco antes de subir a API. Seguro para
-# rodar em todo restart do container: "migrate deploy" só aplica o que
-# ainda não foi aplicado e não pede confirmação (diferente do "migrate dev").
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]
+# `alembic upgrade head` é idempotente: só aplica migrations pendentes a cada start.
+CMD ["sh", "-c", "alembic upgrade head && exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}"]

@@ -1,16 +1,24 @@
-FROM node:20-alpine AS build
+FROM node:22-alpine AS deps
 WORKDIR /app
-# Copiamos também o package-lock.json e usamos `npm ci`: instala exatamente as
-# versões travadas no lockfile (build determinístico) e é mais rápido/cacheável
-# que `npm install` em CI/Docker.
 COPY package.json package-lock.json ./
 RUN npm ci
+
+FROM node:22-alpine AS build
+WORKDIR /app
+# Os rewrites de /api/* são resolvidos no build: informe a URL do backend aqui.
+ARG API_URL=http://backend:8080
+ENV API_URL=$API_URL NEXT_TELEMETRY_DISABLED=1
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
 
-# Imagem "unprivileged" do nginx: já roda como usuário não-root por padrão,
-# escutando na porta 8080 em vez de 80.
-FROM nginxinc/nginx-unprivileged:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 8080
+FROM node:22-alpine AS run
+WORKDIR /app
+ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0
+RUN addgroup -S app && adduser -S app -G app
+COPY --from=build --chown=app:app /app/.next/standalone ./
+COPY --from=build --chown=app:app /app/.next/static ./.next/static
+COPY --from=build --chown=app:app /app/public ./public
+USER app
+EXPOSE 3000
+CMD ["node", "server.js"]
